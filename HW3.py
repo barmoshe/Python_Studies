@@ -98,6 +98,42 @@ def q5_b3(x, y):
     return 3
 
 
+def q6(func):
+    q6.funcs = []
+
+    def wrapper(*args, **kwargs):
+        func_list = q6.funcs
+        if len(func_list) < 2:
+            func_list.append(func.__name__)
+        if len(func_list) >= 2:
+            func_list.append(func.__name__)
+            print(" 3 last functions that ran  :" + str(func_list))
+            func_list.pop()
+            return func(*args, **kwargs)
+
+    return wrapper
+
+
+@q6
+def q61():
+    return 1
+
+
+@q6
+def q62():
+    return 2
+
+
+@q6
+def q63():
+    return 3
+
+
+@q6
+def q64():
+    return 4
+
+
 def main():
     print(q1([lambda x: x + 1, lambda x, y: x + y, lambda x, t, y: 5, lambda z: z]))
     q2()
@@ -110,6 +146,12 @@ def main():
     print("average argument :" + str(a2[0]) + '\n' + "average result" + str(a2[1]))
     print(q5_b3(3, 4))
     print(q5_b3(3, 3))
+    q61()
+    q62()
+    q63()
+    q64()
+    q64()
+
 
 if __name__ == "__main__":
     main()
