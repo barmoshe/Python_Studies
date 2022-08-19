@@ -1,6 +1,8 @@
 import math
 from functools import reduce
 
+import a as a
+
 
 def q1(func_list: list) -> list:
     return list(filter((lambda x: x.__code__.co_argcount <= 1), func_list))
@@ -134,6 +136,60 @@ def q64():
     return 4
 
 
+# q7
+class Twitter:
+    def __init__(self, name):
+        self.name = name
+        self.subscribers = set()
+        self.twits = list()
+
+    def tweet(self, param):
+        print('{} twitted this : \n{}'.format(self.name, param))
+        self.twits.append(param)
+        for t in self.subscribers:
+            print('{} got twitt from {} : {}'.format(t.name, self.name, param))
+
+    def follow(self, twitter):
+        twitter.subscribers.add(self)
+        return self
+
+
+# q8
+def f1(x, y=[]):
+    # The first time it is called without the y arg
+    # the default will work, but calls after that will update the existing y list
+    y.append(x)
+    return sum(y)
+
+
+def f2(x, y=None):
+    # each time we call this function without the y arg the y list will be created as new
+    if y is None:
+        y = []
+    y.append(x)
+    return sum(y)
+
+
+class A:
+
+    def __init__(self, y):
+        self.y = y
+
+    def __call__(self, z):
+        if z > self.y:
+            return z - self.y
+        else:
+            return self.y - z
+
+
+class B(A):
+    def __call__(self, z=4):
+        if z > self.y:
+            return z - self.y
+        else:
+            return self.y - z
+
+
 def main():
     print(q1([lambda x: x + 1, lambda x, y: x + y, lambda x, t, y: 5, lambda z: z]))
     q2()
@@ -151,6 +207,33 @@ def main():
     q63()
     q64()
     q64()
+    # q7
+    alice = Twitter('Alice')
+    king = Twitter('King')
+    queen = Twitter('Queen')
+    hatter = Twitter('Mad Hatter')
+    cat = Twitter('Cheshire Cat')
+    alice.follow(cat).follow(hatter).follow(queen)
+    king.follow(queen)
+    queen.follow(queen).follow(hatter)
+    hatter.follow(alice).follow(queen).follow(cat)
+
+    print(f'==== {queen.name} tweets ====')
+    queen.tweet('Off with their heads!')
+    print(f'\n==== {alice.name} tweets ====')
+    alice.tweet('What a strange world we live in.')
+    print(f'\n==== {king.name} tweets ====')
+    king.tweet('Begin at the beginning, and go on till you come to the end: then stop.')
+    print(f'\n==== {cat.name} tweets ====')
+    cat.tweet("We're all mad here.")
+    print(f'\n==== {hatter.name} tweets ====')
+    hatter.tweet('Why is a raven like a writing-desk?')
+    print(f1(10))
+    print(f1(30))
+    print(f2(10))
+    print(f2(30))
+    print(A(5)(B(6)()))
+    print(A(6)(B(5)(6)))
 
 
 if __name__ == "__main__":
